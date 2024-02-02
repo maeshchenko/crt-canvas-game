@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProduction = process.env.NODE_ENV == 'production';
 
@@ -24,7 +25,10 @@ const config = {
             patterns: [
                 {from: 'public', to: 'public'}
             ]
-        })
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css'
+        }),
     ],
     module: {
         rules: [
@@ -35,7 +39,7 @@ const config = {
             },
             {
                 test: /\.css$/i,
-                use: [stylesHandler,'css-loader'],
+                use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
             {
                 test: /\.s[ac]ss$/i,
@@ -45,9 +49,6 @@ const config = {
                 test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
                 type: 'asset',
             },
-
-            // Add your rules for custom modules here
-            // Learn more about loaders from https://webpack.js.org/loaders/
         ],
     },
     resolve: {
