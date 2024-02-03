@@ -137,6 +137,9 @@ function processInput(){
     // console.log('processInput');
 }
 function changeState(){
+    if(apples0[player.getCoord[1]][player.getCoord[0]] === 2){
+        apples0[player.getCoord[1]][player.getCoord[0]] = 0
+    }
     // console.log('changeState');
 }
 function render(){
