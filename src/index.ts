@@ -3,12 +3,15 @@ import "../style.scss";
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
 
+const SIZE = 40;
+const BORDER_SIZE = SIZE;
+
+canvas.width = SIZE * 12;
+canvas.height = SIZE * 12;
+
 ctx.fillStyle = 'green';
 ctx.fillRect(0,0, canvas.width, canvas.height);
 ctx.fill();
-
-const SIZE = 10;
-const BORDER_SIZE = 10;
 
 let field0 = [
     [0,0,0,0,1,0,0,0,0,0],
@@ -36,14 +39,41 @@ let apples0 = [
     [0,0,0,0,0,0,0,0,0,0]
 ]
 
-let start_position = [0, 0];
-let player_position = [0,0];
+class Player{
+    x:number;
+    y:number;
+
+    constructor(init_x:number,init_y:number) {
+        this.x = init_x;
+        this.y = init_y;
+    }
+    get getCoord() {
+        return [this.x, this.y]
+    }
+    draw(){
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(this.x*SIZE + BORDER_SIZE,this.y*SIZE + BORDER_SIZE,SIZE, SIZE);
+        ctx.fill()
+    }
+    moveLeft(){
+        this.x = this.x - 1;
+    }
+    moveRight(){
+        this.x = this.x + 1;
+    }
+    moveUp(){
+        this.y = this.y - 1;
+    }
+    moveDown(){
+        this.y = this.y + 1;
+    }
+}
 
 function clearField(){
     ctx.clearRect(BORDER_SIZE,BORDER_SIZE,canvas.width - BORDER_SIZE*2, canvas.height - BORDER_SIZE*2);
 }
 
-function drawField(field:number[][], apples: number[][], player_position:number[]){
+function drawField(field:number[][], apples: number[][]){
     for(let i = 0; i<field.length; i++){
         for(let j = 0; j<field[i].length; j++){
             if(field[j][i] === 0){
@@ -61,30 +91,47 @@ function drawField(field:number[][], apples: number[][], player_position:number[
                 ctx.fillRect(i*SIZE + BORDER_SIZE,j*SIZE + BORDER_SIZE,SIZE, SIZE);
                 ctx.fill()
             }
-
-            if(player_position[0] === i && player_position[1] === j){
-                ctx.fillStyle = 'yellow';
-                ctx.fillRect(i*SIZE + BORDER_SIZE,j*SIZE + BORDER_SIZE,SIZE, SIZE);
-                ctx.fill()
-            }
         }
     }
 }
+
+let player = new Player(0,0);
 
 document.addEventListener('keydown', (evt:KeyboardEvent) => {
     console.log(evt.key);
     if (evt.isComposing || evt.key === '229'){
         return;
     }
-    if(evt.key === 'ArrowUp'){
-        player_position[1] === player_position[1] + 1;
-        console.log(player_position)
+    if(
+        evt.key === 'ArrowUp'
+        && player.getCoord[1] - 1 >= 0
+        && field0[player.getCoord[1] - 1][player.getCoord[0]] !== 1
+    ){
+        player.moveUp()
     }
-    if(evt.key === 'ArrowDown'){}
-    if(evt.key === 'ArrowLeft'){}
-    if(evt.key === 'ArrowRight'){}
+    if(
+        evt.key === 'ArrowDown'
+        && player.getCoord[1] + 1 < field0.length
+        && field0[player.getCoord[1] + 1][player.getCoord[0]] !== 1
+    ){
+        player.moveDown();
+    }
+    if(
+        evt.key === 'ArrowLeft'
+        && player.getCoord[0] - 1 >= 0
+        && field0[player.getCoord[1]][player.getCoord[0] - 1] !== 1
+    ){
+        player.moveLeft();
+    }
+    if(
+        evt.key === 'ArrowRight'
+        && player.getCoord[0] + 1 < field0.length
+        && field0[player.getCoord[1]][player.getCoord[0] + 1] !== 1
+    ){
+        player.moveRight();
+    }
     if(evt.key === 'Escape'){}
-})
+});
 
 function processInput(){
     // console.log('processInput');
@@ -94,7 +141,8 @@ function changeState(){
 }
 function render(){
     clearField();
-    drawField(field0, apples0, player_position);
+    drawField(field0, apples0);
+    player.draw();
 }
 
 let gameLoop = function(){
