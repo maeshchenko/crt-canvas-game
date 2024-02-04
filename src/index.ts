@@ -3,13 +3,19 @@ import "../style.scss";
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
 
+const color_brown = '#794a3a';
+const color_red = '#dd5341'
+const color_white = '#faebcc'
+const color_yellow = '#faca78'
+const color_green = '#68c7c1'
+
 const SIZE = 40;
 const BORDER_SIZE = SIZE;
 
 canvas.width = SIZE * 12;
 canvas.height = SIZE * 12;
 
-ctx.fillStyle = 'green';
+ctx.fillStyle = '#666547';
 ctx.fillRect(0,0, canvas.width, canvas.height);
 ctx.fill();
 
@@ -51,7 +57,7 @@ class Player{
         return [this.x, this.y]
     }
     draw(){
-        ctx.fillStyle = 'yellow';
+        ctx.fillStyle = color_green;
         ctx.fillRect(this.x*SIZE + BORDER_SIZE,this.y*SIZE + BORDER_SIZE,SIZE, SIZE);
         ctx.fill()
     }
@@ -77,17 +83,17 @@ function drawField(field:number[][], apples: number[][]){
     for(let i = 0; i<field.length; i++){
         for(let j = 0; j<field[i].length; j++){
             if(field[j][i] === 0){
-                ctx.fillStyle = 'white';
+                ctx.fillStyle = color_white;
                 ctx.fillRect(i*SIZE + BORDER_SIZE,j*SIZE + BORDER_SIZE,SIZE,SIZE);
                 ctx.fill()
             } else if(field[j][i] === 1){
-                ctx.fillStyle = 'black';
+                ctx.fillStyle = color_brown;
                 ctx.fillRect(i*SIZE + BORDER_SIZE,j*SIZE + BORDER_SIZE,SIZE, SIZE);
                 ctx.fill()
             }
 
             if(apples[j][i] === 2){
-                ctx.fillStyle = 'blue';
+                ctx.fillStyle = color_red;
                 ctx.fillRect(i*SIZE + BORDER_SIZE,j*SIZE + BORDER_SIZE,SIZE, SIZE);
                 ctx.fill()
             }
