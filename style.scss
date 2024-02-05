@@ -2,7 +2,15 @@ body {
     background-color: #faebcc;
 }
 .canvas-wrapper {
-    width: 100px;
-    height: 100px;
-    background: red;
+    width: 80px;
+    height: 80px;
+    display: none;
+}
+.canvas-crt-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#canvas-screen{
+    display: none;
 }
